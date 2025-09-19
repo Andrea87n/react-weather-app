@@ -16,6 +16,7 @@ import { API_BASE, ERROR_MESSAGES } from "./config";
 const App = () => {
   const apiKey = import.meta.env.VITE_OPEN_WEATHER_MAP_API_KEY;
 
+  const [apiUrl, setApiUrl] = useState('');
   const [city, setCity] = useState('');
   const [currentWeather, setCurrentWeather] = useState(null);
   const [forecastData, setForecastData] = useState(null);
@@ -94,6 +95,8 @@ const App = () => {
         setError(ERROR_MESSAGES.NOT_FOUND);
         return;
       }
+
+      setApiUrl(apiUrl);
 
       const cityDetails = response.data[0];
       const lat = cityDetails?.lat;
@@ -299,6 +302,7 @@ const App = () => {
           { currentWeather && (
             <animated.div style={fadeIn}>
               <Card
+                apiUrl={apiUrl}
                 currentWeather={currentWeather}
                 weatherIcon={weatherIcon}
                 favorites={favorites}
@@ -311,7 +315,7 @@ const App = () => {
         {/* Leaflet map */}
         <div id="map" className="w-100 md:w-1/2 h-[500px]"></div>
       </section>
-      <section class="px-4">
+      <section className="px-4">
         <ForecastChart forecastData={forecastData} />
       </section>
       <footer className="text-center border-t p-4 mt-8">

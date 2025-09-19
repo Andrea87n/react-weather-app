@@ -1,6 +1,8 @@
 import { Star } from "../icons/ThemeIcons.jsx";
+import toast from 'react-hot-toast';
+import { QRCodeSVG } from 'qrcode.react';
 
-const Card = ({ currentWeather, weatherIcon, favorites, onAddFavorite }) => {
+const Card = ({ apiUrl, currentWeather, weatherIcon, favorites, onAddFavorite }) => {
   return (
     <div className="card w-96 bg-base-100 shadow-sm mt-8 text-left mx-auto">
       <div className="card-body">
@@ -60,6 +62,56 @@ const Card = ({ currentWeather, weatherIcon, favorites, onAddFavorite }) => {
             );
           })}
         </ul>
+        <button
+          className="btn btn-outline mt-2"
+          onClick={
+            () => {
+              navigator.clipboard.writeText(apiUrl);
+              toast.custom(
+                (t) => (
+                  <div
+                    className={`alert alert-success shadow-lg transition-opacity duration-1500 ${
+                      t.visible ? "opacity-100" : "opacity-0"
+                    }`}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 shrink-0 stroke-current"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21
+                           12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <span>URL copied!</span>
+                  </div>
+                ),
+                { duration: 2000 }
+              );
+            }
+          }
+        >
+          Copy Link
+        </button>
+        <div className="mt-4 text-center">
+          <p className="mb-2">Share via QR Code</p>
+          <QRCodeSVG
+            className="mx-auto"
+            value={`
+              City: ${currentWeather.city}
+              Temperature: ${currentWeather.temperature}°
+              Feels like: ${currentWeather.feels_like}°
+              Humidity: ${currentWeather.humidity}%
+            `}
+            size={128}
+          />
+        </div>
+
       </div>
     </div>
   );
